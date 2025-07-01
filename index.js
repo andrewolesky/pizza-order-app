@@ -1,43 +1,44 @@
-const menu = [
-  { name: "Margherita", price: 8 },
-  { name: "Pepperoni", price: 10 },
-  { name: "Hawaiian", price: 10 },
-  { name: "Veggie", price: 9 },
+var menu = [
+    { name: "Margherita", price: 8 },
+    { name: "Pepperoni", price: 10 },
+    { name: "Hawaiian", price: 10 },
+    { name: "Veggie", price: 9 },
 ];
-
-const cashInRegister = 100;
-const nextOrderId = 1;
-const orderQueue = [];
-
+var cashInRegister = 100;
+var nextOrderId = 1;
+var orderQueue = [];
 function addNewPizza(pizzaObj) {
-  menu.push(pizzaObj);
+    menu.push(pizzaObj);
 }
-
 function placeOrder(pizzaName) {
-  const selectedPizza = menu.find((pizzaObj) => pizzaObj.name === pizzaName);
-  cashInRegister += selectedPizza.price;
-  const newOrder = {
-    id: nextOrderId++,
-    pizza: selectedPizza,
-    status: "ordered",
-  };
-  orderQueue.push(newOrder);
-  return newOrder;
+    var selectedPizza = menu.find(function (pizzaObj) { return pizzaObj.name === pizzaName; });
+    if (selectedPizza === undefined) {
+        console.error("".concat(pizzaName, " does not exist in the menu"));
+        return;
+    }
+    cashInRegister += selectedPizza.price;
+    var newOrder = {
+        id: nextOrderId++,
+        pizza: selectedPizza,
+        status: "ordered",
+    };
+    orderQueue.push(newOrder);
+    return newOrder;
 }
-
 function completeOrder(orderId) {
-  const order = orderQueue.find((order) => order.id === orderId);
-  order.status = "completed";
-  return order;
+    var order = orderQueue.find(function (order) { return order.id === orderId; });
+    if (!order) {
+        console.error("".concat(orderId, " was not found in the orderQueue"));
+        throw new Error();
+    }
+    order.status = "completed";
+    return order;
 }
-
-addNewPizza({ name: "Chicken Bacon Ranch", cost: 12 });
-addNewPizza({ name: "BBQ Chicken", cost: 12 });
-addNewPizza({ name: "Spicy Sausage", cost: 11 });
-
+addNewPizza({ name: "Chicken Bacon Ranch", price: 12 });
+addNewPizza({ name: "BBQ Chicken", price: 12 });
+addNewPizza({ name: "Spicy Sausage", price: 11 });
 placeOrder("Chicken Bacon Ranch");
-completeOrder("1");
-
+completeOrder(1);
 console.log("Menu:", menu);
 console.log("Cash in register:", cashInRegister);
 console.log("Order queue:", orderQueue);
